@@ -4,9 +4,7 @@ import pyglet
 from pathlib import Path
 
 
-
 from field import game_field
-
 
 
 batch = pyglet.graphics.Batch()

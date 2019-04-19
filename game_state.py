@@ -4,10 +4,8 @@ import pyglet
 from random import randrange
 
 
-
 from field import game_field
 from images_load import snake_IMG, batch, apple_image
-
 
 
 class Game_state():
@@ -15,19 +13,18 @@ class Game_state():
     Game state class. Snake settings, movement settings, Food settings ...
     '''
     def __init__(self):
-        self.snake_xy = [(0,0),(0,1),(0,2)]
+        self.snake_xy = [(0, 0), (0, 1), (0, 2)]
         self.snake_sprites = []
         self.snake_directions = ['tail-top', 'bottom-top', 'bottom-head']
-        self.direction = (0,1)
-        self.direction0 = (0,0)
-        self.food_xy = [(3,3)]
+        self.direction = (0, 1)
+        self.direction0 = (0, 0)
+        self.food_xy = [(3, 3)]
         self.food_sprites = []
         self.draw_food()
         self.food_max = 10
         self.lifes = 3
         self.state = 'alive'
-        self.keys  = []
-
+        self.keys = []
 
     def directions(self, head):
         '''
@@ -36,7 +33,7 @@ class Game_state():
         '''
         self.snake_directions = []
         help_list = []
-        dict_directions = {(0,1): 'top', (0,-1): 'bottom', (1,0): 'right', (-1,0): 'left'}
+        dict_directions = {(0, 1): 'top', (0, -1): 'bottom', (1, 0): 'right', (-1, 0): 'left'}
 
         for index, xy in enumerate(self.snake_xy):
             if index == len(self.snake_xy) - 1:
@@ -62,7 +59,6 @@ class Game_state():
                 from_to_dir = from_dir + '-' + help_list[index]
             self.snake_directions.append(from_to_dir)
 
-
     def draw_snake_parts(self):
         '''
         Draw the right IMG for each part of snake on the right place.
@@ -74,8 +70,7 @@ class Game_state():
             IMG_name = self.snake_directions[index]
             self.snake_sprites.append(pyglet.sprite.Sprite(snake_IMG[IMG_name], x, y, batch=batch))
 
-
-    def move(self,t):
+    def move(self, t):
         '''
         Snake movement in the set direction.
         Also solve these situations:
@@ -89,8 +84,7 @@ class Game_state():
             y = self.snake_xy[-1][1] + self.direction[1]
 
             # Snake head is out of game field or Snake eats itself
-            if x not in range (0, game_field.collums) or y not in range (0, game_field.rows) \
-                or (x,y) in self.snake_xy:
+            if x not in range (0, game_field.collums) or y not in range(0, game_field.rows) or (x, y) in self.snake_xy:
                 self.directions('dead')
                 self.draw_snake_parts()
                 self.state = 'dead'
@@ -100,11 +94,11 @@ class Game_state():
                     self.state = 'game_over'
                 return
 
-            self.snake_xy.append((x,y))
+            self.snake_xy.append((x, y))
 
             # Snake eats food
-            if (x,y) in self.food_xy:
-                food_index = self.food_xy.index((x,y))
+            if (x, y) in self.food_xy:
+                food_index = self.food_xy.index((x, y))
                 del self.food_sprites[food_index]
                 del self.food_xy[food_index]
                 self.directions('tongue')
@@ -120,20 +114,18 @@ class Game_state():
         if self.state == 'dead' and self.direction0 != self.direction:
             self.state = 'alive'
 
-
     def restart_conditions(self):
-        self.snake_xy = [(0,0),(0,1),(0,2)]
-        self.direction = (0,1)
-        self.direction0 = (0,0)
-        self.food_xy = [(3,3)]
+        self.snake_xy = [(0, 0), (0, 1), (0, 2)]
+        self.direction = (0, 1)
+        self.direction0 = (0, 0)
+        self.food_xy = [(3, 3)]
         self.food_sprites = []
         self.draw_food()
         self.lifes = 3
         self.state = 'alive'
-        self.keys  = []
+        self.keys = []
 
-
-    def add_food(self,t):
+    def add_food(self, t):
         '''
         Add food in food list.
         '''
@@ -143,10 +135,9 @@ class Game_state():
                 y = randrange(0, game_field.rows)
                 if len(self.food_xy) >= self.food_max:
                     return
-                if (x,y) not in self.snake_xy and (x,y) not in self.food_xy:
-                    self.food_xy.append((x,y))
+                if (x, y) not in self.snake_xy and (x, y) not in self.food_xy:
+                    self.food_xy.append((x, y))
                     return
-
 
     def draw_food(self):
         '''
