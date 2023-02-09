@@ -8,10 +8,10 @@ from field import game_field
 from images_load import snake_IMG, batch, apple_image
 
 
-class Game_state():
-    '''
+class GameState:
+    """
     Game state class. Snake settings, movement settings, Food settings ...
-    '''
+    """
     def __init__(self):
         self.snake_xy = [(0, 0), (0, 1), (0, 2)]
         self.snake_sprites = []
@@ -22,15 +22,15 @@ class Game_state():
         self.food_sprites = []
         self.draw_food()
         self.food_max = 10
-        self.lifes = 3
+        self.lives = 3
         self.state = 'alive'
         self.keys = []
 
     def directions(self, head):
-        '''
+        """
         Setting the list with directions of single snake parts.
         It is needed for choice the IMG for snake.
-        '''
+        """
         self.snake_directions = []
         help_list = []
         dict_directions = {(0, 1): 'top', (0, -1): 'bottom', (1, 0): 'right', (-1, 0): 'left'}
@@ -60,24 +60,22 @@ class Game_state():
             self.snake_directions.append(from_to_dir)
 
     def draw_snake_parts(self):
-        '''
-        Draw the right IMG for each part of snake on the right place.
-        '''
+        """Draw the right IMG for each part of snake on the right place."""
         self.snake_sprites.clear()
         for index, xy in enumerate(self.snake_xy):
             x = xy[0]*game_field.square_size + game_field.border
             y = xy[1]*game_field.square_size + game_field.border
-            IMG_name = self.snake_directions[index]
-            self.snake_sprites.append(pyglet.sprite.Sprite(snake_IMG[IMG_name], x, y, batch=batch))
+            img_name = self.snake_directions[index]
+            self.snake_sprites.append(pyglet.sprite.Sprite(snake_IMG[img_name], x, y, batch=batch))
 
     def move(self, t):
-        '''
+        """
         Snake movement in the set direction.
         Also solve these situations:
                 --> Snake out of game field
                 --> Snake eats itself
                 --> Snake eats food
-        '''
+        """
         if self.state == 'alive':
             # Snake head coordinates
             x = self.snake_xy[-1][0] + self.direction[0]
@@ -89,8 +87,8 @@ class Game_state():
                 self.draw_snake_parts()
                 self.state = 'dead'
                 self.direction0 = self.direction
-                self.lifes -= 1
-                if self.lifes == 0:
+                self.lives -= 1
+                if self.lives == 0:
                     self.state = 'game_over'
                 return
 
@@ -121,14 +119,12 @@ class Game_state():
         self.food_xy = [(3, 3)]
         self.food_sprites = []
         self.draw_food()
-        self.lifes = 3
+        self.lives = 3
         self.state = 'alive'
         self.keys = []
 
     def add_food(self, t):
-        '''
-        Add food in food list.
-        '''
+        """Add food in food list."""
         if self.state == 'alive':
             while True:
                 x = randrange(0, game_field.collums)
@@ -140,9 +136,7 @@ class Game_state():
                     return
 
     def draw_food(self):
-        '''
-        Draw food in game field.
-        '''
+        """Draw food in game field."""
         self.food_sprites.clear()
         for index, xy in enumerate(self.food_xy):
             x = xy[0]*game_field.square_size + game_field.border
